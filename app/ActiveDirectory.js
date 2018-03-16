@@ -21,17 +21,19 @@ static ViewPassword(x,res){
 
 static ChangePassword(x,res){
 
-res.json({
-	 	"speech":"Probando AD",
-  	"displayText":"Si me voy si no estas",
-  	"followupEvent":{
-  		name:"changePass",
-  		data:{"usuario":"Andy",
-  	          "pass":"nuevoadmin"},
-  		source:"Prueba"
-  	}
-});
-}
+  res.json({
+  	 	"speech":"Probando AD",
+    	"displayText":"Si me voy si no estas",
+    	"followupEvent":{
+    		name:"changePass",
+    		data:{"usuario":"Andy",
+    	          "pass":"nuevoadmin"},
+    		source:"Prueba"
+    	}
+  });
+  }
+
+  
 }
 
 module.exports=ActiveDirectory;
