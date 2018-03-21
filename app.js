@@ -5,8 +5,8 @@ var middleware=require("./HandOff/MdpMiddleware")
 var MdpHandOff=require("./HandOff/MdpHandOff")
 var md=require("./enrutador/DialogFlow")
 var connector = new builder.ChatConnector({
-    appId: '2f5a81e5-2237-4e96-9f8b-0953aa5d1421',
-    appPassword: 'redzcoHG9(:qGABGL0262=#'
+    appId: 'a0b21d95-ed6d-4870-aee0-364dc70d5a60',
+    appPassword: 'eooyFRFB70^wxcDZH775|[%'
 });
 
 

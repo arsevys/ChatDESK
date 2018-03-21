@@ -59,17 +59,19 @@ this.bot.send(new builder.Message().address(addressCliente).text(x));
 
 
 
-static esAgente(session){
-
-		var valida=MdpDBMesaDeAyuda.obtener(session);
+static esAgente(session,callback){
+     
+		var valida=MdpDBMesaDeAyuda.obtener(session,(data)=>{
+    if(data.length>0){
+      return  callback(true);
+    }
+    else {
+      return callback(false);
+    }
+    });
 		console.log(valida);
 
-		if(valida){
-			return true;
-		}
-		else {
-			return false;
-		}
+		
 
 }
 

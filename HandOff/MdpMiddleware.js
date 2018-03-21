@@ -33,6 +33,15 @@ function comandos(session,next,agente){
        agente.enviarMensajeCliente(MdpDBMesaDeAyuda.obtenerAddressCliente(session.message.address.conversation.id),session.message.text)
       
     }else {
+      if(session.message.text == "Disponible"){
+        let x={id:session.message.conversation.id,
+               address:session.message.address
+               };
+           MdpDBMesaDeAyuda.insertMesadeAyuda(x,()=>{
+             session.send("Usted esta disponible para recibir mensajes de clientes")
+           });
+        return;
+      }
       session.send("USted no esta conectado con un agente")
 
     }
@@ -43,26 +52,39 @@ function comandos(session,next,agente){
 
 
 var msg=session.message.text;
-if(MdpHandOff.esAgente(session)){
+    MdpHandOff.esAgente(session,function(r){
 
-console.log("-----------Entro en sesion de agente-----------------")
-console.log(agente);
-agente.enviarMensajeAgente(msg);
+    if(r){
 
-}
-else {
-if(msg=="Agente"){
-  MdpDBMesaDeAyuda.guardar({id:session.message.address.conversation.id , address:session.message.address  });
-  //Buscar y hacer math con una mesa de ayuda conectado
-  MdpDBMesaDeAyuda.HacerMath({ idMesa: '548zaKW7d2JATv4yqNFK2N' ,  addressCliente:session.message.address })
-  session.send("En breves momentos te conectaras con un Agente y le enviara un mensaje");
+      console.log("-----------Entro en sesion de agente-----------------")
+      console.log(agente);
+      agente.enviarMensajeAgente(msg);
 
-}
-else {
+      }
+    else {
+          if(msg=="Agente"){
+            MdpDBMesaDeAyuda.guardar({id:session.message.address.conversation.id , address:session.message.address  });
+            session.send("Conectanco con Agente ...............");
+            //Buscar y hacer math con una mesa de ayuda conectado
+            MdpDBMesaDeAyuda.HacerMath(session.message.address,(err)=>{
+               if(err){
+                session.send("Por el momento no se encuentra nadies disponible");
+                return;
+               }
+                session.send("Agente Conectado con exito");
+            } )
+          }
 
- next();
-}
+
+          else {
+
+           next();
+          }
+
+        }
+
+    })
+
 }
 
  
-}
