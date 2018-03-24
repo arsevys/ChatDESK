@@ -13,10 +13,6 @@ class MdpMiddleware {
   }
 
 
-
-
-
-
 }
 
 module.exports=MdpMiddleware;
@@ -24,17 +20,19 @@ module.exports=MdpMiddleware;
 
 function comandos(session,next,agente){
 
-	console.log(session);
+	// console.log(session.message,774);
 
 
   if(session.message.address.channelId=='webchat'){
     
     if(MdpDBMesaDeAyuda.obtenerAddressCliente(session.message.address.conversation.id)){
+      console.log("-----------Enviando mensajes por un agente-----------------")
        agente.enviarMensajeCliente(MdpDBMesaDeAyuda.obtenerAddressCliente(session.message.address.conversation.id),session.message.text)
       
     }else {
       if(session.message.text == "Disponible"){
-        let x={id:session.message.conversation.id,
+        // console.log(session.message.address.conversation,777777777777777777777777777)
+        let x={id:session.message.address.conversation.id,
                address:session.message.address
                };
            MdpDBMesaDeAyuda.insertMesadeAyuda(x,()=>{
@@ -51,7 +49,7 @@ function comandos(session,next,agente){
 
 
 
-var msg=session.message.text;
+ var msg=session.message.text;
     MdpHandOff.esAgente(session,function(r){
 
     if(r){

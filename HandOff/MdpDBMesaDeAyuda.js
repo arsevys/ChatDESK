@@ -13,6 +13,8 @@ const config={
 var pool=new pg.Pool(config)
 class  MdpDBMesaDeAyuda {
 
+
+//guardamos el address del cliente
 static guardar(x){
 
  pool.connect((err,client,done)=>{
@@ -31,9 +33,9 @@ static guardar(x){
 			done();
 			})
  })
-
-
 }
+
+//obtenemos el addres del cliente por parte del agente ingresando el id de conversacion
 static obtener(x ,callback){
  let ide=x.message.address.conversation.id;
  pool.connect((err,client,done)=>{
@@ -58,6 +60,8 @@ static obtener(x ,callback){
  })
 }
 
+
+//conectar con los tipos de mesa de ayuda que estan conectados
 static insertMesadeAyuda(x,callback){
    pool.connect((err,client,done)=>{
 		  
@@ -81,6 +85,8 @@ static insertMesadeAyuda(x,callback){
  })
 }
 
+
+//insertamos y conectamos las conversaciones de un cliente con un agente
 static HacerMath(x,callback){
 
 
@@ -89,11 +95,11 @@ static HacerMath(x,callback){
   	return console.log(err)
   }
 
-var query=`select * from helpdesk
+  var query=`select * from helpdesk
            where estado='0' 
            order by id limit 1`;
 
- client.query(query,param,function(error,data){
+  client.query(query,param,function(error,data){
     if(error){
   	return console.log(error)
      }
@@ -110,9 +116,10 @@ var query=`select * from helpdesk
 
 		   }) 
  })
-})
-
+ })
 }
+
+
 static obtenerAddressCliente(x){
 	return math[x]
 }
