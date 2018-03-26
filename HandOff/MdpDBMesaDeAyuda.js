@@ -52,6 +52,7 @@ static obtener(x ,callback){
 		  }
 
 		done();
+		console.log(data.rows,786854444444444444444);
 		callback(data.rows)
 		return ;
 	})
@@ -95,21 +96,21 @@ static HacerMath(x,callback){
   	return console.log(err)
   }
 
-  var query=`select * from helpdesk
-           where estado='0' 
-           order by id limit 1`;
+  var query=`insert into clientes (ideclient,address)
+			values($1,$2)`;
 
-  client.query(query,param,function(error,data){
+  client.query(query,[x.id,x.address],function(error,data){
     if(error){
+    	done();
   	return console.log(error)
      }
-     if(data.rows.length==0){ callback(true); done(); return;}
-			let query1=`insert into isMath 
+  
+			let query1=`insert into ismath 
 			values($1,$2,$3)`;
-			var param=[data.rows[0].idhelpdesk,x.conversation.id,x]
+			var param=[x.idhelp,x.id,x.address]
     client.query(query1,param,function(error,data){
 		    if(error){
-		  	return console.log(error)
+		  	return console.log(error);
 		     }
          callback(false);
 		  done();
@@ -119,9 +120,113 @@ static HacerMath(x,callback){
  })
 }
 
+//Buscamos un chat de mesa ayuda disponible 
+static GetHelpDeskDisponible(callback){
 
-static obtenerAddressCliente(x){
-	return math[x]
+
+		 pool.connect((err,client,done)=>{	
+			if(err){
+		  	return console.log(err)
+		                   }
+
+		  var query=`select * from helpdesk
+		           where estado='0' 
+		           order by id limit 1`;
+
+		  client.query(query,[],function(error,data){
+		    if(error){
+		  	return console.log(error)
+		     }
+		     done();
+
+		       if(data.rows.lengt==0){
+		       	return  callback(false,null);
+		       }
+		       else {
+		       	return callback(true,data.rows[0]);
+		       }
+		        
+				  
+				   }) 
+		 })
+
+}
+
+
+
+//Obtenemos el address del math que se realizo
+static obtenerAddressCliente(x,callback){
+
+	  pool.connect((err,client,done)=>{
+		  
+		  if(err){
+		  	return console.log(err)
+		  }
+
+			   let query=`select address from ismath where idehelpdesk=$1 
+			   order by idehelpdesk limit 1`;
+
+			    client.query(query,[x],function(error,data){
+					if(error){
+					  	return console.log(error)
+					  }
+			     
+					done();
+			     if(data.rows.length==0){
+			     	return callback(false,null);
+			     }
+			     else {
+			     	return callback(false,data.rows[0].address);
+			     }
+
+
+
+	})
+		  
+			
+ })
+
+}
+//Obtenemos el address de helpdesk del math  que se realizo 
+static obtenerAddressHelpDesk(x,callback){
+
+	  pool.connect((err,client,done)=>{
+		  
+		  if(err){
+		  	return console.log(err)
+		  }
+
+			   let query=`
+			    select h.address from ismath i
+				inner join helpdesk h
+				on h.idehelpdesk=i.idehelpdesk
+				inner join clientes c
+				on c.ideclient=i.ideclient
+				where i.ideclient=$1
+				order by i.ideclient limit 1
+			   `;
+
+			    client.query(query,[x],function(error,data){
+					if(error){
+					  	return console.log(error)
+					  }
+			     
+					done();
+			     if(data.rows.length==0){
+			     	return callback(true,null);
+			     }
+			     else {
+			     	console.log(data.rows[0]);
+			     	return callback(false,data.rows[0].address);
+			     }
+
+
+
+	})
+		  
+			
+ })
+
 }
 }
 

@@ -44,9 +44,9 @@ constructor(bot){
   };
       }
 
- enviarMensajeAgente(x){
-
-this.bot.send(new builder.Message().address(agente).text(x));
+ enviarMensajeAgente(addr,x){
+console.log("************".addr)
+this.bot.send(new builder.Message().address(addr).text(x));
 
 }
 

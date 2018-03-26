@@ -1,5 +1,5 @@
 
-//var AD=require("./../app/ActiveDirectory");
+var AD=require("./../app/ActiveDirectory");
 
 class RouteActiveDirectory {
 

@@ -7,24 +7,18 @@ const projectId = {
   "project_id": "chatdesk-d2d97"
  
 }
-;
+var apiai=require("apiai");
+var dialog=apiai("5cf626273b774fa6b0ec6c898c77010c");
+
 const sessionId = 'quickstartsession-id';
 
 
-function DialogFlow(id,mensaje){
+function DialogFlow(id,mensaje,callback){
 
 console.log("***************************************************************");
-
-
-// console.log(id,mensaje);
-
 //  const sessionClient = new dialogflow.SessionsClient();
 
 //  const sessionPath = sessionClient.sessionPath(projectId, sessionId);
- 
-
-
-
 // // The text query request.
 // const request = {
 //   session: sessionPath,
@@ -56,16 +50,16 @@ console.log("***************************************************************");
 
 
 
-var apiai=require("apiai");
-var dialog=apiai("5cf626273b774fa6b0ec6c898c77010c");
+
 var requestr=dialog.textRequest(mensaje,{
-	sessionId:"123456"
+	sessionId:"147"
 });
 
 
 requestr.on('response', function(response) {
-    console.log(response);
-
+    console.log(response.result.fulfillment,"#######################");
+   let  res=response.result.fulfillment.messages;
+   return callback(res[0].speech)
 });
  
 requestr.on('error', function(error) {
@@ -73,12 +67,6 @@ requestr.on('error', function(error) {
 });
 
 requestr.end();
-
-
-
-
-
-
 
 return "En que te puedo ayudar";
 }
