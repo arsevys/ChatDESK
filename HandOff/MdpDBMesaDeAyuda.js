@@ -176,7 +176,9 @@ static obtenerAddressCliente(x,callback){
 			     	return callback(false,null);
 			     }
 			     else {
-			     	return callback(false,data.rows[0].address);
+			     	console.log("###################$$$$$$$$$$$$$$$$$$$$$$$$");
+			     	console.log(true,JSON.parse(data.rows[0].address))
+			     	return callback(true,data.rows[0].address);
 			     }
 
 
@@ -213,11 +215,11 @@ static obtenerAddressHelpDesk(x,callback){
 			     
 					done();
 			     if(data.rows.length==0){
-			     	return callback(true,null);
+			     	return callback(false,null);
 			     }
 			     else {
 			     	console.log(data.rows[0]);
-			     	return callback(false,data.rows[0].address);
+			     	return callback(true,data.rows[0].address);
 			     }
 
 

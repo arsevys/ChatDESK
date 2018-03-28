@@ -26,13 +26,13 @@ function comandos(session,next,agente){
   if(session.message.address.channelId=='webchat'||session.message.address.channelId=='telegram'){
     
     MdpDBMesaDeAyuda.obtenerAddressCliente(session.message.address.conversation.id,function(validar,addressCliente){
-      console.log(validar,addresscliente)
+      console.log(validar)
 
     if(validar){
       console.log("-----------Enviando mensajes por un agente-----------------")
 
-
-       agente.enviarMensajeCliente(addresscliente, session.message.text);
+     // console.log(JSON.parse(addresscliente),addressCliente)
+       agente.enviarMensajeCliente(JSON.parse(addressCliente), session.message.text);
       
     
 
