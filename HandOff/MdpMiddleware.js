@@ -41,7 +41,8 @@ function comandos(session,next,agente){
       if(session.message.text == "Disponible"){
         // console.log(session.message.address.conversation,777777777777777777777777777)
         let x={id:session.message.address.conversation.id,
-               address:session.message.address
+               address:session.message.address,
+               canal:session.message.address.channelId
                };
            MdpDBMesaDeAyuda.insertMesadeAyuda(x,()=>{
              session.send("Usted esta disponible para recibir mensajes de clientes")
@@ -93,7 +94,8 @@ else {
                          let obj={
                           id:id,
                           address:addr,
-                          idhelp:data.idehelpdesk
+                          canal:addr.channelId,
+                          idhelp:data.idehelp
 
                          }
 

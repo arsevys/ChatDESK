@@ -1,9 +1,13 @@
 var express = require('express');
 var builder = require('botbuilder');
 var azure =require("botbuilder-azure");
+var bodyParser=require("body-parser");
+var expressMidleware=require("./enrutador/ExpressMiddleware");
 var middleware=require("./HandOff/MdpMiddleware")
 var MdpHandOff=require("./HandOff/MdpHandOff")
 var md=require("./enrutador/DialogFlow")
+
+
 var connector = new builder.ChatConnector({
     appId: 'a0b21d95-ed6d-4870-aee0-364dc70d5a60',
     appPassword: 'eooyFRFB70^wxcDZH775|[%'
@@ -12,6 +16,34 @@ var connector = new builder.ChatConnector({
 
 var app = express();
 app.use('/public', express.static('public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+// app.use(function(req,res,next){
+
+
+//  console.log(JSON.stringify(req.body),778);
+
+
+// //es facebook Workplace
+//  if(req.body.entry){
+//   console.log(req.body.entry[0].messaging[0].message.text);
+//    if(req.body.entry[0].messaging[0].message.text=="Agente"){
+//     console.log("Entro de agente");
+
+
+//    }
+//    else{
+
+//    }
+//  }
+//  next();
+// })
+
+
+
+
 
 app.listen(process.env.port || process.env.PORT || 3000, function () {
 
@@ -65,7 +97,7 @@ var bot = new builder.UniversalBot(connector, function (session) {
     
 
     }
-});
+}).set('storage', new builder.MemoryBotStorage());
 
 app.post("/des",function(req,res){
 
@@ -87,8 +119,26 @@ app.post("/des",function(req,res){
 
 
 app.post("/conectarAgente",function(req,res){
+  console.log(req.body);
 })
 
+
+
+app.get("/conectCliente",(req,res)=>{
+
+  console.log(req);
+ if (req.query['hub.mode']  &&
+      req.query['hub.verify_token'] === "MDP2018") {
+        console.log("Enlazado con facebook");
+        res.status(200).send(req.query['hub.challenge']);
+  } else {
+        console.error("Failed validation. Make sure the validation tokens match.");
+        res.sendStatus(403);          
+         }  
+})
+app.post("/conectCliente",(req,res)=>{
+ console.log(req.body,78542);
+})
 
 var agente= new MdpHandOff(bot);
 var a=[];

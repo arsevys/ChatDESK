@@ -70,10 +70,10 @@ static insertMesadeAyuda(x,callback){
 		  	return console.log(err)
 		  }
 
-   let query=`insert into helpdesk(idehelpdesk,address,estado)
-   values($1,$2,$3)`;
+   let query=`insert into helpdesk(idehelp,sesiones,estado,canal)
+   values($1,$2,$3,$4)`;
 
-    client.query(query,[x.id,x.address,"0"],function(error,data){
+    client.query(query,[x.id,x.address,"0",x.canal],function(error,data){
 		if(error){
 		  	return console.log(error)
 		  }
@@ -96,8 +96,8 @@ static HacerMath(x,callback){
   	return console.log(err)
   }
 
-  var query=`insert into clientes (ideclient,address)
-			values($1,$2)`;
+  var query=`insert into clientes (ideclient,sesiones,canal)
+			values($1,$2,$3)`;
 
   client.query(query,[x.id,x.address],function(error,data){
     if(error){
@@ -105,7 +105,7 @@ static HacerMath(x,callback){
   	return console.log(error)
      }
   
-			let query1=`insert into ismath 
+			let query1=`insert into conector
 			values($1,$2,$3)`;
 			var param=[x.idhelp,x.id,x.address]
     client.query(query1,param,function(error,data){
@@ -163,8 +163,11 @@ static obtenerAddressCliente(x,callback){
 		  	return console.log(err)
 		  }
 
-			   let query=`select address from ismath where idehelpdesk=$1 
-			   order by idehelpdesk limit 1`;
+			   let query=`select cli.sesiones as address from conector c
+							inner join clientes cli 
+							on c.ideclient=cli.ideclient
+							where c.idehelp=$1 
+			                order by c.idehelp limit 1`;
 
 			    client.query(query,[x],function(error,data){
 					if(error){
