@@ -61,17 +61,17 @@ this.bot.send(new builder.Message().address(addressCliente).text(x));
 
 static esAgente(session,callback){
      
-		var valida=MdpDBMesaDeAyuda.obtener(session,(data)=>{
-    if(data.length>0){
-      return  callback(true);
-    }
-    else {
-      return callback(false);
-    }
-    });
-		console.log(valida);
+		// var valida=MdpDBMesaDeAyuda.obtener(session,(data)=>{
+  //   if(data.length>0){
+  //     return  callback(true);
+  //   }
+  //   else {
+  //     return callback(false);
+  //   }
+  //   });
+		// console.log(valida);
 
-		
+		  return callback(false);
 
 }
 

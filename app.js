@@ -5,8 +5,8 @@ var bodyParser=require("body-parser");
 var expressMidleware=require("./enrutador/ExpressMiddleware");
 var middleware=require("./HandOff/MdpMiddleware")
 var MdpHandOff=require("./HandOff/MdpHandOff")
-var md=require("./enrutador/DialogFlow")
-
+// var md=require("./enrutador/DialogFlow")
+var watson=require("./enrutador/WatsonAssistant");
 
 var connector = new builder.ChatConnector({
     appId: 'a0b21d95-ed6d-4870-aee0-364dc70d5a60',
@@ -85,13 +85,30 @@ var bot = new builder.UniversalBot(connector, function (session) {
     } else {
 
 
+          // bot.send(new builder.Message().address(t).text("ozuna"));
 
-    // bot.send(new builder.Message().address(t).text("ozuna"));
+          console.log(msg.address.conversation.id);
+          let aidi=msg.address.conversation.id;
+      if(true){
 
-    
-            md.DialogFlow(msg.address.conversation.id.substr(0,8),msg.text,function(x){
+
+   }
+          
+       watson.getContext(aidi,function(z){
+        console.log(z,78)
+
+        if(z.length==0){
+          watson.mensaje(msg.text,{},true,function(x){
                session.send(x); 
             })
+        }else {
+           watson.mensaje(msg.text,z[0].sesiones,false,function(x){
+               session.send(x); 
+            })
+        }
+          
+       });   
+         
 
      
     
@@ -136,6 +153,9 @@ app.get("/conectCliente",(req,res)=>{
         res.sendStatus(403);          
          }  
 })
+
+
+
 app.post("/conectCliente",(req,res)=>{
  console.log(req.body,78542);
 })
