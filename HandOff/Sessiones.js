@@ -10,7 +10,7 @@ const config={
 var pool=new pg.Pool(config)
 class Sessiones{
 
-static registrar(x,a){
+static registrar(x,a,callback){
  pool.connect((err,client,done)=>{
   
 	  if(err){
@@ -19,12 +19,38 @@ static registrar(x,a){
 			let query=`insert into sesionesWatson(ide,sesiones)
          values($1,$2);`;
 
-			client.query(query,[x.id,JSON.stringify(x.address)],function(error,data){
+			client.query(query,[x,JSON.stringify(a)],function(error,data){
 			if(error){
 			  	return console.log(error)
 			  }
 
 			done();
+			return callback();
+
+			})
+ })
+
+
+}
+
+static actualisar(x,a,callback){
+ pool.connect((err,client,done)=>{
+  
+	  if(err){
+	  	return console.log(err)
+	  }
+			let query=`update sesioneswatson
+				set sesiones=$2
+				where ide=$1;`;
+
+			client.query(query,[x,JSON.stringify(a)],function(error,data){
+			if(error){
+			  	return console.log(error)
+			  }
+
+			done();
+			return callback();
+
 			})
  })
 

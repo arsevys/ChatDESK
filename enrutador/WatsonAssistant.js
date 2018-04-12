@@ -11,7 +11,7 @@ var conf ={
 };
 class WatsonAssistant {
 
-static mensaje(x,context,nuevo,callback){
+static mensaje(id,x,context,nuevo,callback){
     var assistant = new AssistantV1(conf);
 console.log(x,context,nuevo)
     let mensajes={
@@ -23,7 +23,19 @@ console.log(x,context,nuevo)
     	if(err){console.log(err);}
     	else {
     		console.log(response);
-    		return callback(response.output.text[0])
+
+    		if(nuevo){
+    			bd.registrar(id,response.context,()=>{
+    				callback(response.output.text[0])
+    			})
+    			return ;
+    		}
+    			else{
+    				bd.actualisar(id,response.context,()=>{
+    				callback(response.output.text[0])
+    			})
+    			}
+    		
     	}
 
     })

@@ -98,11 +98,11 @@ var bot = new builder.UniversalBot(connector, function (session) {
         console.log(z,78)
 
         if(z.length==0){
-          watson.mensaje(msg.text,{},true,function(x){
+          watson.mensaje(aidi,msg.text,{},true,function(x){
                session.send(x); 
             })
         }else {
-           watson.mensaje(msg.text,z[0].sesiones,false,function(x){
+           watson.mensaje(aidi,msg.text,JSON.parse(z[0].sesiones),false,function(x){
                session.send(x); 
             })
         }
