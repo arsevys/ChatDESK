@@ -16,10 +16,10 @@ static registrar(x,a,callback){
 	  if(err){
 	  	return console.log(err)
 	  }
-			let query=`insert into sesionesWatson(ide,sesiones)
-         values($1,$2);`;
-
-			client.query(query,[x,JSON.stringify(a)],function(error,data){
+			let query=`insert into sesionesWatson(ide,sesiones,email,nombre,first_nombre,last_nombre)
+         values($1,$2,$3,$4,$5,$6);`;
+          let d=[x,JSON.stringify(a),a.email,a.name,a.first_name,a.last_name]
+			client.query(query,d,function(error,data){
 			if(error){
 			  	return console.log(error)
 			  }
@@ -40,7 +40,8 @@ static actualisar(x,a,callback){
 	  	return console.log(err)
 	  }
 			let query=`update sesioneswatson
-				set sesiones=$2
+				set sesiones=$2,
+				UltimaSession=to_char(now() AT TIME ZONE 'UTC' - interval '5 hours','YYYY-MM-DD HH24:MI:SS')
 				where ide=$1;`;
 
 			client.query(query,[x,JSON.stringify(a)],function(error,data){

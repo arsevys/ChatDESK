@@ -7,7 +7,7 @@ var middleware=require("./HandOff/MdpMiddleware")
 var MdpHandOff=require("./HandOff/MdpHandOff")
 // var md=require("./enrutador/DialogFlow")
 var watson=require("./enrutador/WatsonAssistant");
-
+var FBGraph=require("./enrutador/FbGraphApi")
 var connector = new builder.ChatConnector({
     appId: 'a0b21d95-ed6d-4870-aee0-364dc70d5a60',
     appPassword: 'eooyFRFB70^wxcDZH775|[%'
@@ -89,18 +89,19 @@ var bot = new builder.UniversalBot(connector, function (session) {
 
           console.log(msg.address.conversation.id);
           let aidi=msg.address.conversation.id;
-      if(true){
-
-
-   }
-          
+    
        watson.getContext(aidi,function(z){
-        console.log(z,78)
+      
 
         if(z.length==0){
-          watson.mensaje(aidi,msg.text,{},true,function(x){
+          FBGraph.getData(msg.address.user.id,function(data){
+              console.log(data,78);
+             
+            watson.mensaje(aidi,msg.text,data,true,function(x){
                session.send(x); 
             })
+          })
+          
         }else {
            watson.mensaje(aidi,msg.text,JSON.parse(z[0].sesiones),false,function(x){
                session.send(x); 
