@@ -18,6 +18,7 @@
     "express": "^4.16.3",
     "pg": "^7.4.1",
     "request": "^2.85.0",
+    "twilio": "^3.15.0",
     "watson-developer-cloud": "^3.3.0"
   }
 }

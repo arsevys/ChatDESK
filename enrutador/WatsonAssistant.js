@@ -1,7 +1,7 @@
 
 var bd =require("./../HandOff/Sessiones");
 var AssistantV1 = require('watson-developer-cloud/assistant/v1');
-
+var FullFillment=require("./FulfillmentWatson")
 var wID="661ed2e9-5f9d-4794-af72-08c65d09a3ef";
 var conf ={
 	  "username": "b649ff55-8e14-4566-a49c-62897ef33e08",
@@ -11,7 +11,7 @@ var conf ={
 };
 class WatsonAssistant {
 
-static mensaje(id,x,context,nuevo,callback){
+static mensaje(session,id,x,context,nuevo,callback){
     var assistant = new AssistantV1(conf);
 console.log(x,context,nuevo)
     let mensajes={
@@ -26,14 +26,19 @@ console.log(x,context,nuevo)
 
     		if(nuevo){
     			bd.registrar(id,response.context,()=>{
-    				callback(response.output.text[0])
+    				callback(response.output.text)
     			})
     			return ;
     		}
     			else{
-    				bd.actualisar(id,response.context,()=>{
-    				callback(response.output.text[0])
-    			})
+    				
+    				FullFillment.tester(session,id,response.context,response.context.text,(text,context)=>{
+    					bd.actualisar(id,context,()=>{
+    					callback(text)
+    					})
+    				})
+    				
+    			
     			}
     		
     	}

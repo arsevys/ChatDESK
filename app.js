@@ -2,6 +2,7 @@ var express = require('express');
 var builder = require('botbuilder');
 var azure =require("botbuilder-azure");
 var bodyParser=require("body-parser");
+var FullFillment=require("./enrutador/FulfillmentWatson")
 var expressMidleware=require("./enrutador/ExpressMiddleware");
 var middleware=require("./HandOff/MdpMiddleware")
 var MdpHandOff=require("./HandOff/MdpHandOff")
@@ -63,10 +64,10 @@ var agente=false;
 app.post('/api/messages', connector.listen());
 
 var bot = new builder.UniversalBot(connector, function (session) {
-
+    session.sendTyping();
 
     var msg = session.message;
-    // console.log(msg);
+     console.log(msg.text);
     if (msg.attachments && msg.attachments.length > 0) {
      // Echo back attachment
      var attachment = msg.attachments[0];
@@ -83,11 +84,28 @@ var bot = new builder.UniversalBot(connector, function (session) {
         });
 
     } else {
-
+ 
+             let msgy = new builder.Message(session).text("dsfsd");
+    
+    //   msgy.sourceEvent({
+    //     facebook: { 
+    //         quick_replies: [{
+    //             content_type:"text",
+    //             title:"Si, quiero 👍",
+    //             payload:"si"
+    //         },            
+    //         {
+    //             content_type:"text",
+    //             title:"No , gracias 👎",
+    //             payload:"no"
+    //         }]
+    //     }
+    // });
+    // session.send(msgy);
 
           // bot.send(new builder.Message().address(t).text("ozuna"));
 
-          console.log(msg.address.conversation.id);
+           console.log(msg.address);
           let aidi=msg.address.conversation.id;
     
        watson.getContext(aidi,function(z){
@@ -95,16 +113,18 @@ var bot = new builder.UniversalBot(connector, function (session) {
 
         if(z.length==0){
           FBGraph.getData(msg.address.user.id,function(data){
-              console.log(data,78);
+              // console.log(data,78);
              
-            watson.mensaje(aidi,msg.text,data,true,function(x){
-               session.send(x); 
+            watson.mensaje(session,aidi,msg.text,data,true,function(x){
+               enviar(session,x);
             })
           })
           
         }else {
-           watson.mensaje(aidi,msg.text,JSON.parse(z[0].sesiones),false,function(x){
-               session.send(x); 
+          // FullFillment.tester()
+           watson.mensaje(session,aidi,msg.text,JSON.parse(z[0].sesiones),false,function(x){
+           
+               enviar(session,x);
             })
         }
           
@@ -116,6 +136,46 @@ var bot = new builder.UniversalBot(connector, function (session) {
 
     }
 }).set('storage', new builder.MemoryBotStorage());
+
+
+function enviar(session,mensaje){
+  console.log("WWWWWWWWWWWWWWWWWWWWWWWWWWW")
+for(let i=0;mensaje.length>i;i++){
+     
+     if(mensaje[i].type){
+           let h=mensaje[i];
+           console.log(h,7888)
+      if(h.type=="card"){
+   console.log("CARDDDDDDDDDDDDDDDDDDDDDDD")
+     
+        let msgy = new builder.Message(session).sourceEvent(h.data);
+    session.send(msgy);
+      }
+      else if(h.type=="quick"){
+           let msgy = new builder.Message(session).text(h.text).sourceEvent(h.data);
+    session.send(msgy);
+      }
+
+
+    
+     }
+     else{
+         session.send(mensaje[i]);
+     }
+
+}
+
+function isJson(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+      console.log("Errorrr JSONN")
+        return false;
+    }
+    return true;
+}
+
+}
 
 app.post("/des",function(req,res){
 
