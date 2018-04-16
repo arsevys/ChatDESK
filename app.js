@@ -53,9 +53,7 @@ app.listen(process.env.port || process.env.PORT || 3000, function () {
 });
 
 
-var object={
-	"t":0
-}
+
 
 var agente=false;
   
@@ -139,17 +137,19 @@ var bot = new builder.UniversalBot(connector, function (session) {
 
 
 function enviar(session,mensaje){
-  console.log("WWWWWWWWWWWWWWWWWWWWWWWWWWW")
+
 for(let i=0;mensaje.length>i;i++){
      
      if(mensaje[i].type){
            let h=mensaje[i];
-           console.log(h,7888)
+        
       if(h.type=="card"){
-   console.log("CARDDDDDDDDDDDDDDDDDDDDDDD")
+   
      
         let msgy = new builder.Message(session).sourceEvent(h.data);
-    session.send(msgy);
+       session.send(msgy);
+
+
       }
       else if(h.type=="quick"){
            let msgy = new builder.Message(session).text(h.text).sourceEvent(h.data);

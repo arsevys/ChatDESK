@@ -18,7 +18,7 @@ static registrar(x,a,callback){
 	  }
 			let query=`insert into sesionesWatson(ide,sesiones,email,nombre,first_nombre,last_nombre)
          values($1,$2,$3,$4,$5,$6);`;
-          let d=[x,JSON.stringify(a),a.email,a.name,a.first_name,a.last_name]
+          let d=[x,JSON.stringify(a),a.email,a.name,a.first_name,a.last_name];
 			client.query(query,d,function(error,data){
 			if(error){
 			  	return console.log(error)
