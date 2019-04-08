@@ -17,7 +17,7 @@ static Inicio(req,res){
 		console.log(tipoApp);
 switch(tipoApp){
 	case "ActiveDirectory":RAD.Enrutador(action,data,res);break;
-	case "Twilio":console.log("Action ");break;
+
 	case "Base":console.log("Action ");break;
 }
 

@@ -63,6 +63,7 @@ app.post('/api/messages', connector.listen());
 
 var bot = new builder.UniversalBot(connector, function (session) {
     session.sendTyping();
+    
 
     var msg = session.message;
      console.log(msg.text);
@@ -106,6 +107,8 @@ var bot = new builder.UniversalBot(connector, function (session) {
            console.log(msg.address);
           let aidi=msg.address.conversation.id;
     
+
+
        watson.getContext(aidi,function(z){
       
 
@@ -140,7 +143,8 @@ function enviar(session,mensaje){
 
 for(let i=0;mensaje.length>i;i++){
      
-     if(mensaje[i].type){
+     if(mensaje[i].type){ 
+      
            let h=mensaje[i];
         
       if(h.type=="card"){
